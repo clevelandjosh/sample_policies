@@ -1,0 +1,36 @@
+{
+  "mode": "All",
+  "parameters": {
+    "requiredAgentVersion": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Required Agent Version",
+        "description": "Specify the required CrowdStrike agent version (e.g., 6.5.0.12345)."
+      },
+      "defaultValue": "6.5.0.12345"
+    }
+  },
+  "displayName": "Ensure CrowdStrike Agent is Installed and Up-to-Date",
+  "description": "This policy checks if CrowdStrike's agent is installed and its version is up-to-date on Azure ARC-enabled VMs.",
+  "policyRule": {
+    "if": {
+      "field": "type",
+      "equals": "Microsoft.HybridCompute/machines"
+    },
+    "then": {
+      "effect": "audit",
+      "details": {
+        "type": "Custom",
+        "name": "crowdStrikeAgentCheck",
+        "message": "CrowdStrike agent is either not installed or not up-to-date on this VM."
+      },
+      "policyDefinitionReferenceId": "crowdStrikeAgentCheck",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/crowdStrikeAgentCheck",
+      "parameters": {
+        "requiredAgentVersion": {
+          "value": "[parameters('requiredAgentVersion')]"
+        }
+      }
+    }
+  }
+}
