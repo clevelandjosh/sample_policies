@@ -7,12 +7,14 @@ from azure.identity import DefaultAzureCredential
 credential = DefaultAzureCredential()
 resource_graph_client = ResourceGraphClient(credential)
 
+
 # Define and execute your Azure Resource Graph query
-query = """
-resources
-| where type in~ ('Microsoft.Management/managementGroups', 'Microsoft.Management/managementGroups/subscriptions', 'Microsoft.Resources/resourceGroups')
-| project type, name, subscriptionId, tenantId, managementGroup, location
-"""
+query = """az graph query -q "project type, name, subscriptionId, tenantId, managementGroup, location" --output json > azure_resource_hierarchy.json"""
+# query = """
+# resources
+# | where type in~ ('Microsoft.Management/managementGroups', 'Microsoft.Management/managementGroups/subscriptions', 'Microsoft.Resources/resourceGroups')
+# | project type, name, subscriptionId, tenantId, managementGroup, location
+# """
 results = resource_graph_client.resources(query)
 
 # Create a list to store the hierarchy data
